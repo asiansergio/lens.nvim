@@ -61,6 +61,33 @@ function M.setup(opts)
   ensure_setup()
 end
 
+-- Default keymaps for LazyVim integration
+M.keys = {
+  {
+    '<leader>l',
+    function()
+      require('lens').add_highlight_from_visual()
+    end,
+    mode = 'x',
+    desc = 'Add highlight to visual selection',
+  },
+  {
+    '<leader>l',
+    function()
+      require('lens').remove_highlight_at_cursor()
+    end,
+    mode = 'n',
+    desc = 'Remove highlight at cursor',
+  },
+  {
+    '<leader>L',
+    function()
+      require('lens').clear_all()
+    end,
+    desc = 'Clear all highlights',
+  },
+}
+
 -- Auto-initialize with defaults when module loads
 ensure_setup()
 
