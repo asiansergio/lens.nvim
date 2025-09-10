@@ -5,7 +5,7 @@ local namespace_id = vim.api.nvim_create_namespace 'lens'
 local highlights = {}
 local config = {
   highlight_group = 'LensHighlight',
-  bg = '#3e4451',
+  bg = nil,
   fg = nil,
   bold = nil,
   italic = nil,
@@ -26,8 +26,12 @@ local function ensure_setup()
 
   -- Create custom highlight group
   if config.highlight_group == 'LensHighlight' then
+    -- Try more vibrant highlight groups for better visibility while maintaining readability
+    local visual_hl = vim.api.nvim_get_hl(0, { name = 'Visual', link = false })
+    local default_bg = visual_hl.bg or 0x3e4451
+
     vim.api.nvim_set_hl(0, 'LensHighlight', {
-      bg = config.bg,
+      bg = config.bg or default_bg,
       fg = config.fg,
       bold = config.bold,
       italic = config.italic,
@@ -94,10 +98,6 @@ ensure_setup()
 function M.add_highlight_from_visual()
   -- Get the current visual selection while still in visual mode
   local mode = vim.fn.mode()
-  vim.notify(
-    string.format('add_highlight_from_visual called, mode: %s', mode),
-    vim.log.levels.INFO
-  )
 
   if mode ~= 'v' and mode ~= 'V' and mode ~= '' then
     vim.notify('Must be called from visual mode', vim.log.levels.WARN)
